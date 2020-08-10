@@ -1,0 +1,22 @@
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+  
+    .title {
+      margin: 10px 0;
+    }
+
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        align-items: left;
+        width: 40%;
+      }
+  }
