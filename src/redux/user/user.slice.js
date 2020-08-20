@@ -56,6 +56,14 @@ const userSlice = createSlice({
                 console.log(error);
             }
         },
+        setUser: (state, action) => {
+            state.user = action.payload;
+        },
+        setGlobalError: (state, action) => {
+            state.error = action.payload;
+        }
+        
+
     }
 });
 
@@ -63,7 +71,8 @@ const userSlice = createSlice({
 export const {
     signInWithGoogle,
     signInWithEmail,
-    getSnapshotFromUserAuth,
-    signUp
+    signUp,
+    setUser,
+    setGlobalError
 } = userSlice.actions;
 export default userSlice.reducer;

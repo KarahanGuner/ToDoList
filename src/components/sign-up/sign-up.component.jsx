@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import FormInput from '../form-input/form-input.component';
-import {signUp} from '../../redux/user/user.slice';
+import {setUser, setGlobalError} from '../../redux/user/user.slice';
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+
 
 import './sign-up.styles.scss';
 
 const SignUp = () => {
-    const user = useSelector((state) => state.userReducer.user);
-    console.log('====user in signup component=====');
-    console.log(user);
     const dispatch = useDispatch();
 
     const [userCredentials, setCredentials] = useState({
@@ -19,6 +18,7 @@ const SignUp = () => {
     });
 
     const {email, displayName, password, confirmPassword} = userCredentials;
+
     const handleChange = event => {
         const {name, value} = event.target;
 
@@ -28,7 +28,21 @@ const SignUp = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        dispatch(signUp(userCredentials));
+        const {email, password, displayName, confirmPassword} = userCredentials;
+        if(password !== confirmPassword) {
+          alert("Passwords do not match");
+          return;
+        }
+        try {
+            const {user} = await auth.createUserWithEmailAndPassword(email, password);
+            const userRef= await createUserProfileDocument(user, {displayName});
+            const userSnapshot = await userRef.get();
+            const newUser = {id: userSnapshot.id, ...userSnapshot.data()};
+            delete newUser.createdAt;
+            dispatch(setUser(newUser));
+        } catch(error) {
+            dispatch(setGlobalError(error));
+        }
     };
 
 
@@ -36,7 +50,7 @@ const SignUp = () => {
         <div className='sign-up'>
           <h2 className='title'>I do not have a account</h2>
           <span>Sign up with your email and password</span>
-          <form className='sign-up-form' onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <FormInput
               type='text'
               name='displayName'

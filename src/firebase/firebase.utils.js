@@ -15,24 +15,46 @@ const config = {
 
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-    if(!userAuth) return;
-    const userRef = firestore.doc(`users/${userAuth.uid}`);
-    const snapShot = await userRef.get();
-    if(!snapShot.exists) {
-      const {email} = userAuth;
-      const createdAt = new Date();
-      try{
-        await userRef.set({
-          email,
-          createdAt,
-          ...additionalData
-        })
-      } catch(error){
-        console.log('error creating user');
-      }
+  if(!userAuth) return;
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+  if(!snapShot.exists) {
+    const {email} = userAuth;
+    const createdAt = new Date();
+    try{
+      await userRef.set({
+        email,
+        createdAt,
+        ...additionalData
+      })
+    } catch(error){
+      console.log('error creating user');
     }
-    return userRef;
   }
+  return userRef;
+}
+
+export const createListDocument = async () => {
+  const loggedInUser = await getCurrentUser();
+  if(!loggedInUser) return;
+  await firestore.collection("lists").doc().set({
+    owner: "asd",
+    members: ["asd"],
+    content: ["thecontent"],
+    listName: 'list1'
+  });
+  console.log("list created");
+}
+
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe();
+      resolve(userAuth);
+    }, reject)
+  })
+}
 
 
 firebase.initializeApp(config);

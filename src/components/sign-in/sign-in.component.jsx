@@ -1,12 +1,18 @@
 import React, {useState} from 'react';
 import FormInput from '../form-input/form-input.component';
 import './sign-in.styles.scss'
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import {setUser, setGlobalError} from '../../redux/user/user.slice';
+import { useDispatch } from "react-redux"
+
 
 const SignIn = () => {
     const [userCredentials, setCredentials] = useState({
         email: '',
         password: ''
     });
+
+    const dispatch = useDispatch();
 
     const {email, password} = userCredentials;
 
@@ -18,7 +24,17 @@ const SignIn = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-
+        
+        const {user} = await auth.signInWithEmailAndPassword(email, password);
+        try {
+            const userRef= await createUserProfileDocument(user);
+            const userSnapshot = await userRef.get();
+            const loggedInUser = {id: userSnapshot.id, ...userSnapshot.data()};
+            delete loggedInUser.createdAt;
+            dispatch(setUser(loggedInUser));
+        } catch(error) {
+            dispatch(setGlobalError(error));
+        }
     };
 
 
