@@ -25,6 +25,8 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
       await userRef.set({
         email,
         createdAt,
+        ownersOf: [],
+        membersOf: [],
         ...additionalData
       })
     } catch(error){
@@ -34,15 +36,22 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 }
 
-export const createListDocument = async () => {
+export const createListDocumentAndAddIdToOwner = async (listName, userObject) => {
+  const {membersOf, ownersOf} = userObject;
   const loggedInUser = await getCurrentUser();
-  if(!loggedInUser) return;
-  await firestore.collection("lists").doc().set({
-    owner: "asd",
-    members: ["asd"],
-    content: ["thecontent"],
-    listName: 'list1'
+  if(!loggedInUser && ownersOf.length >= 3) return;
+  const listDocumentRef = await firestore.collection("lists").add({
+    owner: loggedInUser.uid,
+    members: [loggedInUser.uid],
+    content: [],
+    listName: listName
   });
+  membersOf.push(listDocumentRef.id);
+  ownersOf.push(listDocumentRef.id);
+  await firestore.collection("users").doc(loggedInUser.uid).set({
+    membersOf: membersOf,
+    ownersOf: ownersOf
+  }, {merge: true});
   console.log("list created");
 }
 

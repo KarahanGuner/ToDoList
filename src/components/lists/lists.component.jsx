@@ -1,4 +1,9 @@
 import React, {useState} from 'react';
+//react redux
+import { useSelector } from "react-redux"
+//firebase utils
+import {createListDocumentAndAddIdToOwner} from '../../firebase/firebase.utils';
+//material ui
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,13 +32,14 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const Lists = () => {
+    const user = useSelector((state) => state.userReducer.user);
     const styles = useStyles();    
 
     const [newList, setNewList] = useState('');
 
     const handleSubmit = event => {
         event.preventDefault();
-        
+        createListDocumentAndAddIdToOwner(newList, user);
     }
 
     const handleChange = event => {
@@ -54,7 +60,7 @@ const Lists = () => {
                     value={newList}
                     onChange={handleChange}
                 />
-                <IconButton className={styles.buttonStyles} color="primary"><AddIcon fontSize='large' className={styles.iconStyles}/></IconButton>
+                <button>+</button>
             </form>
         <List component="nav" aria-label="secondary mailbox folder">
             <ListItem button>
