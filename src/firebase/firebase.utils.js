@@ -36,24 +36,50 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 }
 
-export const createListDocumentAndAddIdToOwner = async (listName, userObject) => {
-  const {membersOf, ownersOf} = userObject;
+export const createListDocumentAndAddIdToOwner = async (listName) => {
   const loggedInUser = await getCurrentUser();
-  if(!loggedInUser && ownersOf.length >= 3) return;
+  const userDoc = await firestore.collection("users").doc(loggedInUser.uid).get();
+  const userData = await userDoc.data();
+  const {membersOf, ownersOf} = userData;
+  const newMembersOf = [...membersOf];
+  const newOwnersOf = [...ownersOf];
+  if(!loggedInUser || newOwnersOf.length >= 3){
+    console.log('Number of owned lists = ' + newOwnersOf.length);
+    console.log('List creation failed');
+    return;
+  } 
   const listDocumentRef = await firestore.collection("lists").add({
     owner: loggedInUser.uid,
     members: [loggedInUser.uid],
     content: [],
     listName: listName
   });
-  membersOf.push(listDocumentRef.id);
-  ownersOf.push(listDocumentRef.id);
+  newMembersOf.push(listDocumentRef.id);
+  newOwnersOf.push(listDocumentRef.id);
   await firestore.collection("users").doc(loggedInUser.uid).set({
-    membersOf: membersOf,
-    ownersOf: ownersOf
+    membersOf: newMembersOf,
+    ownersOf: newOwnersOf
   }, {merge: true});
   console.log("list created");
-}
+};
+
+export const getEnrolledLists = async () => {
+  const loggedInUser = await getCurrentUser();
+  const userDoc = await firestore.collection("users").doc(loggedInUser.uid).get();
+  const userData = await userDoc.data();
+  const {membersOf, ownersOf} = userData;
+  return {membersOf, ownersOf};
+};
+
+export const getListNamesFromListIds = async (arrayOfIds) => {
+  const nameArray = await arrayOfIds.map(async id => {
+    const listDoc = await firestore.collection("lists").doc(id).get();
+    const listData = await listDoc.data();
+    return listData.listName;
+  });
+  const resolvedNameArray = await Promise.all(nameArray); //makes it so that we dont return unresolved promises
+  return resolvedNameArray;
+};
 
 
 export const getCurrentUser = () => {

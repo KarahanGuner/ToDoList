@@ -7,7 +7,7 @@ import './homepage.styles.scss';
 import { useSelector, useDispatch } from "react-redux"
 import {setUser} from '../../redux/user/user.slice';
 
-import { auth, getCurrentUser } from '../../firebase/firebase.utils';
+import { auth, getCurrentUser, getEnrolledLists } from '../../firebase/firebase.utils';
 
 
 const HomePage = () => {
@@ -27,6 +27,12 @@ const HomePage = () => {
         console.log(loggedInUser);
     }
 
+    const getLists = async () => {
+        const lists = await getEnrolledLists();
+        console.log(lists.membersOf);
+        console.log(lists.ownersOf);
+    }
+    
     let signinOrSignUp;
     let toggleMessage;
     if (hasAccount) {
@@ -56,6 +62,7 @@ const HomePage = () => {
         
         <button className='button' type='button' onClick={handleSignout}>Sign Out</button>
         <button className='button' type='button' onClick={isLoggedIn}>Consolelog LoggedIn User</button>
+        <button className='button' type='button' onClick={getLists}>Get Enrolled Lists</button>
     </div>
     )
 };
