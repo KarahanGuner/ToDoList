@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 //react redux
-//import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import {setRender} from '../../redux/render/render.slice';
 //firebase utils
 import {createListDocumentAndAddIdToOwner, getEnrolledLists, getListNamesFromListIds} from '../../firebase/firebase.utils';
 //material ui
@@ -35,23 +36,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-
 const Lists = () => {
-    //const user = useSelector((state) => state.userReducer.user);
-    const styles = useStyles();    
+    const dispatch = useDispatch();
 
+    const styles = useStyles();    
+    console.log('lists component rerendered');
     const [newList, setNewList] = useState('');
     const [listNames, setListNames] = useState([]);
-
-    
+    const [listIds, setListIds] = useState([]);
+    const [forceEffect, toggleForceEffect] = useState(true); //can force useEffect by toggle'ing forceEffect variable
 
     const renderRow = (props) => {
         const { index, style } = props;
-        console.log(style);
       
         return (
           <ListItem button style={style} key={index}>
-            <ListItemText primary={listNames[index]} />
+            <ListItemText onClick={() => {dispatch(setRender({lists: false, contents: listIds[index], settings: ''}))}} primary={listNames[index]} />
           </ListItem>
         );
     }
@@ -59,16 +59,19 @@ const Lists = () => {
     useEffect(() => {
         const getMembersOf = async () => {
             const {membersOf} = await getEnrolledLists();
+            setListIds(membersOf);  
             const listNames = await getListNamesFromListIds(membersOf);
-            await setListNames(listNames);
+            setListNames(listNames);
         }
         getMembersOf();
-    }, []);
+    }, [forceEffect]);
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
         console.log('reached handle submit');
-        createListDocumentAndAddIdToOwner(newList);
+        await createListDocumentAndAddIdToOwner(newList);
+        await setNewList('');
+        await toggleForceEffect(value => !value);
     }
 
     const handleChange = event => {

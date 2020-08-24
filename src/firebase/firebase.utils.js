@@ -43,7 +43,7 @@ export const createListDocumentAndAddIdToOwner = async (listName) => {
   const {membersOf, ownersOf} = userData;
   const newMembersOf = [...membersOf];
   const newOwnersOf = [...ownersOf];
-  if(!loggedInUser || newOwnersOf.length >= 3){
+  if(!loggedInUser || newOwnersOf.length >= 10){
     console.log('Number of owned lists = ' + newOwnersOf.length);
     console.log('List creation failed');
     return;

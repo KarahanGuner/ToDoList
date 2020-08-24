@@ -4,28 +4,21 @@ import {  } from '../../firebase/firebase.utils';
 const renderSlice = createSlice({
     name: 'renderSlice',
     initialState: {
-        lists: true,
-        contents: '',
-        settings: ''
+        render: {
+            lists: true,
+            contents: '',
+            settings: ''
+        }
     },
     reducers: {
-        renderLists: (state) => {
-
-        },
-        renderContents: (state, action) => {
-
-        },
-        renderSettings: (state, action) => {
-
+        setRender: (state, action) => {
+            state.render = action.payload;
         }
-
     }
 });
 
 
 export const {
-    renderLists,
-    renderContents,
-    renderSettings
+    setRender
 } = renderSlice.actions;
 export default renderSlice.reducer;
