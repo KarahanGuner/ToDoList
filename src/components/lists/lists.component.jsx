@@ -57,6 +57,7 @@ const Lists = () => {
     }
 
     useEffect(() => {
+        console.log('use effect in LISTS component fired');
         const getMembersOf = async () => {
             const {membersOf} = await getEnrolledLists();
             setListIds(membersOf);  

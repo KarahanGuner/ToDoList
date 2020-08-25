@@ -75,12 +75,40 @@ export const getListNamesFromListIds = async (arrayOfIds) => {
   const nameArray = await arrayOfIds.map(async id => {
     const listDoc = await firestore.collection("lists").doc(id).get();
     const listData = await listDoc.data();
+    console.log('listData.listName in firebaseutils =' + listData.listName);
     return listData.listName;
   });
   const resolvedNameArray = await Promise.all(nameArray); //makes it so that we dont return unresolved promises
   return resolvedNameArray;
 };
 
+export const getListNameAndListContentFromId = async (listId) => {
+  const listDoc = await firestore.collection("lists").doc(listId).get();
+  const listData = await listDoc.data();
+  return listData;
+}
+
+export const addNewItemToList = async (listId, item) => {
+  const listDoc = await firestore.collection("lists").doc(listId).get();
+  const listData = await listDoc.data();
+  const {content} = listData;
+  content.push(item);
+  await firestore.collection("lists").doc(listId).set({
+    content: content
+  }, {merge:true});
+  return;
+};
+
+export const deleteItemFromList = async (listId, itemIndex) => {
+  const listDoc = await firestore.collection("lists").doc(listId).get();
+  const listData = await listDoc.data();
+  const {content} = listData;
+  content.splice(itemIndex, 1);
+  await firestore.collection("lists").doc(listId).set({
+    content: content
+  }, {merge:true});
+  return;
+}
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
