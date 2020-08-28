@@ -69,8 +69,8 @@ const SignUp = () => {
     return (
         <div className='sign-up'>
                 <Grid container>
-        <Grid item xs={1} ></Grid>
-        <Grid item xs={10}>
+        <Grid item xs={1} md={2}></Grid>
+        <Grid item xs={10} md={8}>
           <form onSubmit={handleSubmit}>
           <h2 className={styles.titleStyles}>I do not have a account</h2>
           <span>Sign up with your email and password</span>
@@ -127,7 +127,7 @@ const SignUp = () => {
                 </Button>
           </form>
           </Grid>
-          <Grid item xs={1}></Grid>
+          <Grid item xs={1} md={2}></Grid>
         </Grid>
         </div>
       );
