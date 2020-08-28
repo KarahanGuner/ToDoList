@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from "react-redux"
 import {setRender} from '../../redux/render/render.slice';
 //firebase utils
-import {getListNameAndListContentFromId, addNewItemToList, deleteItemFromList} from '../../firebase/firebase.utils';
+import {getListDataFromId, addNewItemToList, deleteItemFromList} from '../../firebase/firebase.utils';
 //material ui
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +13,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { FixedSizeList } from "react-window";
-import Checkbox from "@material-ui/core/Checkbox";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -42,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
       },
+    strikeThrough: {
+        textDecoration: 'line-through',
+    }
 }));
 
 
@@ -51,6 +53,7 @@ const Contents = () => {
     const [newItem, setNewItem] = useState('');
     const [listName, setListName] = useState('');
     const [content, setContent] = useState([]);
+    const [dashed, setDashed] = useState([]);
     const [forceEffect, toggleForceEffect] = useState(true); //can force useEffect by toggle'ing forceEffect variable
     //redux
     const dispatch = useDispatch(); 
@@ -61,7 +64,7 @@ const Contents = () => {
     useEffect(() => {
         console.log('use effect in CONTENTS component fired');
         const getListData = async () => {
-            const {content, listName} = await getListNameAndListContentFromId(listId);
+            const {content, listName} = await getListDataFromId(listId);
             setListName(listName);
             setContent(content);
         };
@@ -70,7 +73,6 @@ const Contents = () => {
     
     const handleSubmit = async event => {
         event.preventDefault();
-        console.log('reached handle submit');
         await addNewItemToList(listId, newItem);
         setNewItem('');
         toggleForceEffect(!forceEffect);
@@ -83,6 +85,7 @@ const Contents = () => {
 
     const renderRow =(props) => {
         const { index, style } = props;
+
         return (
           <ListItem button style={style} key={index}>
             {/* <Checkbox
@@ -92,8 +95,11 @@ const Contents = () => {
               disableRipple
               inputProps={{ "aria-labelledby": index }}
             /> */}
-            <ListItemText id={index} primary={content[index]}/>
-            <IconButton onClick={async () => {await deleteItemFromList(listId, index); toggleForceEffect(!forceEffect);}} edge="end" aria-label="list item">
+            <ListItemText onClick={() => {let _dashed=[...dashed];
+                                          _dashed[index] = !_dashed[index];
+                                          setDashed(_dashed)}
+                                    } className={dashed[index] ? styles.strikeThrough : null} id={index} primary={content[index]}/>
+            <IconButton onClick={async () => {let newDashed = dashed; newDashed.splice(index, 1); setDashed(newDashed); await deleteItemFromList(listId, index); await toggleForceEffect(!forceEffect);  }} edge="end" aria-label="list item">
                 <CloseIcon />
             </IconButton>
           </ListItem>
@@ -110,7 +116,7 @@ const Contents = () => {
                     <Typography variant="h6" className={styles.title}>
                         {listName}
                     </Typography>
-                    <IconButton  color="inherit" aria-label="settings">
+                    <IconButton onClick={() => {dispatch(setRender({lists: false, contents: '', settings: listId}))}}  color="inherit" aria-label="settings">
                         <SettingsIcon/>
                     </IconButton>
                     

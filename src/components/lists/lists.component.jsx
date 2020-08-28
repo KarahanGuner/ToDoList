@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     },
     iconStyles: {
         padding: 0
-    }
+    },
+
 }));
 
 
@@ -99,7 +100,7 @@ const Lists = () => {
                 <FixedSizeList  height={400} itemSize={44} itemCount={listNames.length}>
                     {renderRow}
                 </FixedSizeList>
-            </div>
+            </div >
         </div>
         
         

@@ -1,6 +1,7 @@
 import React from 'react';
 import Lists from '../../components/lists/lists.component';
 import Contents from '../../components/contents/contents.component';
+import Settings from '../../components/settings/settings.component';
 //react-redux
 import { useSelector } from "react-redux";
 
@@ -17,6 +18,7 @@ const AppPage = () => {
             <Grid item xs={12} sm={8}>
                 { chooseRender.lists ? <Lists/> : null }
                 { chooseRender.contents ? <Contents/> : null }
+                { chooseRender.settings ? <Settings/> : null }
             </Grid>
             <Grid item xs={false} sm={2}></Grid>
         </Grid>

@@ -75,14 +75,23 @@ export const getListNamesFromListIds = async (arrayOfIds) => {
   const nameArray = await arrayOfIds.map(async id => {
     const listDoc = await firestore.collection("lists").doc(id).get();
     const listData = await listDoc.data();
-    console.log('listData.listName in firebaseutils =' + listData.listName);
     return listData.listName;
   });
   const resolvedNameArray = await Promise.all(nameArray); //makes it so that we dont return unresolved promises
   return resolvedNameArray;
 };
 
-export const getListNameAndListContentFromId = async (listId) => {
+export const getMembersNameFromMembersId = async (idArray) => {
+  const nameArray = await idArray.map(async id => {
+    const memberDoc = await firestore.collection("users").doc(id).get();
+    const memberData = await memberDoc.data();
+    return memberData.displayName;
+  });
+  const resolvedNameArray = await Promise.all(nameArray);
+  return resolvedNameArray;
+};
+
+export const getListDataFromId = async (listId) => {
   const listDoc = await firestore.collection("lists").doc(listId).get();
   const listData = await listDoc.data();
   return listData;
@@ -108,6 +117,83 @@ export const deleteItemFromList = async (listId, itemIndex) => {
     content: content
   }, {merge:true});
   return;
+}
+
+export const addNewMemberToList = async (email, listId) => {
+  //gettings members array from listId
+  const listDoc = await firestore.collection("lists").doc(listId).get();
+  const listData = await listDoc.data();
+  const {members} = listData;
+  if (members.length >= 50) {
+    console.log("Could not add new member. Limit of 50 is reached.");
+    return;
+  }
+  //getting the userId from email and 
+  const userDocs = await firestore.collection("users").where("email", "==", email).get();
+  const userId = userDocs.docs[0].id;
+  const userDoc = userDocs.docs[0].data();
+  const {membersOf} = await userDoc;
+  membersOf.push(listId);
+  //adding listId to that user's "membersOf"
+  await firestore.collection("users").doc(userId).set({
+    membersOf: membersOf
+  }, {merge:true});
+  //adding userId to list's "members"
+  members.push(userId);
+  await firestore.collection("lists").doc(listId).set({
+    members: members
+  }, {merge:true});
+
+};
+
+export const deleteMemberFromList = async (memberId, listId) => {
+    //deleting memberId from list's members
+    const listDoc = await firestore.collection("lists").doc(listId).get();
+    const listData = await listDoc.data();
+    const {members} = listData;
+    const filteredMembers = members.filter(member => member != memberId);
+    await firestore.collection("lists").doc(listId).set({
+      members: filteredMembers
+    }, {merge:true});
+    //deleting listId from user
+    const userDoc = await firestore.collection("users").doc(memberId).get();
+    const userData = await userDoc.data();
+    const {membersOf} = userData;
+    const filteredLists = membersOf.filter(list => list != listId);
+    await firestore.collection("users").doc(memberId).set({
+      membersOf: filteredLists
+    }, {merge:true});
+
+};
+
+export const leaveTheList = async (userId, listId) => {
+  //deleting listId from user
+  const userDoc = await firestore.collection("users").doc(userId).get();
+  const userData = userDoc.data();
+  const {membersOf, ownersOf} = userData;
+  const filteredMembersOf = membersOf.filter(list => list != listId);
+  const filteredOwnersOf = ownersOf.filter(list => list != listId);
+  await firestore.collection("users").doc(userId).set({
+    membersOf: filteredMembersOf,
+    ownersOf: filteredOwnersOf
+  }, {merge:true});
+  //deleting user from list's members and owner
+  const listDoc = await firestore.collection("lists").doc(listId).get();
+  const listData = listDoc.data();
+  let {members, owner} = listData;
+  if(owner == userId){
+    owner = members[1];
+  };
+  const filteredMembers = members.filter(member => member != userId);
+  await firestore.collection("lists").doc(listId).set({
+    members: filteredMembers,
+    owner: owner
+  }, {merge:true});
+}
+
+export const experimentFindDocumentFromEmail = async () => {
+  const userDoc = await firestore.collection("users").where("email", "==", "karahan2@gmail.com").get();
+  console.log(userDoc.docs[0].data()); //userDoc is a "where object" (not document object) , it has satisfiying documents as an array under the docs key
 }
 
 export const getCurrentUser = () => {

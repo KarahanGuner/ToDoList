@@ -7,7 +7,7 @@ import './homepage.styles.scss';
 import { useSelector, useDispatch } from "react-redux"
 import {setUser} from '../../redux/user/user.slice';
 
-import { auth, getCurrentUser, getEnrolledLists } from '../../firebase/firebase.utils';
+import { auth, getCurrentUser, getEnrolledLists, experimentFindDocumentFromEmail } from '../../firebase/firebase.utils';
 
 
 const HomePage = () => {
@@ -63,6 +63,7 @@ const HomePage = () => {
         <button className='button' type='button' onClick={handleSignout}>Sign Out</button>
         <button className='button' type='button' onClick={isLoggedIn}>Consolelog LoggedIn User</button>
         <button className='button' type='button' onClick={getLists}>Get Enrolled Lists</button>
+        <button className='button' type='button' onClick={experimentFindDocumentFromEmail}>find by email</button>
     </div>
     )
 };
