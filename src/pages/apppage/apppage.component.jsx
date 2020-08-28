@@ -13,16 +13,11 @@ const AppPage = () => {
     const chooseRender = useSelector((state) => state.renderReducer.render);
     console.log('this is render in apppage = ' + chooseRender.contents);
     return (
-        <Grid container>
-            <Grid item xs={false} sm={2}></Grid>
-            <Grid item xs={12} sm={8}>
-                { chooseRender.lists ? <Lists/> : null }
-                { chooseRender.contents ? <Contents/> : null }
-                { chooseRender.settings ? <Settings/> : null }
-            </Grid>
-            <Grid item xs={false} sm={2}></Grid>
-        </Grid>
-        
+        <div>
+            { chooseRender.lists ? <Lists/> : null }
+            { chooseRender.contents ? <Contents/> : null }
+            { chooseRender.settings ? <Settings/> : null }
+        </div>
     )
 };
 

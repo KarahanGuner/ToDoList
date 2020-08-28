@@ -191,10 +191,6 @@ export const leaveTheList = async (userId, listId) => {
   }, {merge:true});
 }
 
-export const experimentFindDocumentFromEmail = async () => {
-  const userDoc = await firestore.collection("users").where("email", "==", "karahan2@gmail.com").get();
-  console.log(userDoc.docs[0].data()); //userDoc is a "where object" (not document object) , it has satisfiying documents as an array under the docs key
-}
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {

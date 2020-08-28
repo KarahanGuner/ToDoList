@@ -2,13 +2,15 @@ import React, {useState} from 'react';
 import SignIn from '../../components/sign-in/sign-in.component';
 import SignUp from '../../components/sign-up/sign-up.component';
 import AppPage from '../apppage/apppage.component';
-import './homepage.styles.scss';
+// import './homepage.styles.scss';
 
 import { useSelector, useDispatch } from "react-redux"
 import {setUser} from '../../redux/user/user.slice';
 
-import { auth, getCurrentUser, getEnrolledLists, experimentFindDocumentFromEmail } from '../../firebase/firebase.utils';
+import { auth, getCurrentUser, getEnrolledLists } from '../../firebase/firebase.utils';
 
+//material-ui
+import Grid from '@material-ui/core/Grid';
 
 const HomePage = () => {
     const [hasAccount, toggleHasAccount] = useState(true);
@@ -49,21 +51,26 @@ const HomePage = () => {
 
     return (   
     <div className='home' >
-        {
-            !user 
-            ? <div>{signinOrSignUp}</div> 
-            : <AppPage/>
-        }
-        {
-            !user 
-            ? <div><button className='button' type='button' onClick={toggleSigninSignup}>{toggleMessage}</button></div> 
-            : null
-        }
+        <Grid container>
+            <Grid item xs={false} sm={2}></Grid>
+            <Grid item xs={12} sm={8} >
+            {
+                !user 
+                ? <div>{signinOrSignUp}</div> 
+                : <AppPage/>
+            }
+            {
+                !user 
+                ? <div><button className='button' type='button' onClick={toggleSigninSignup}>{toggleMessage}</button></div> 
+                : null
+            }
+            </Grid>
+            <Grid item xs={false} sm={2}></Grid>
+        </Grid>
         
         <button className='button' type='button' onClick={handleSignout}>Sign Out</button>
         <button className='button' type='button' onClick={isLoggedIn}>Consolelog LoggedIn User</button>
         <button className='button' type='button' onClick={getLists}>Get Enrolled Lists</button>
-        <button className='button' type='button' onClick={experimentFindDocumentFromEmail}>find by email</button>
     </div>
     )
 };

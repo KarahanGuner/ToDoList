@@ -1,15 +1,35 @@
 import React, {useState} from 'react';
 import { useDispatch } from "react-redux"
-import FormInput from '../form-input/form-input.component';
 import {setUser, setGlobalError} from '../../redux/user/user.slice';
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+//material ui
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 
-import './sign-up.styles.scss';
+const useStyles = makeStyles((theme) => ({
+  inputStyles: {
+      width: '100%',
+      borderRadius: 0,
+      marginTop: '10px',
+      marginBottom: '5px'
+       
+  },
+  buttonStyles: {
+      width: '35%',
+      marginTop: '10px',
+  },
+  titleStyles: {
+      marginTop: '10px',
+      marginBottom: '10px'
+  }
+}));
 
 const SignUp = () => {
     const dispatch = useDispatch();
-
+    const styles = useStyles();
     const [userCredentials, setCredentials] = useState({
         email: '',
         displayName: '',
@@ -48,10 +68,17 @@ const SignUp = () => {
 
     return (
         <div className='sign-up'>
-          <h2 className='title'>I do not have a account</h2>
-          <span>Sign up with your email and password</span>
+                <Grid container>
+        <Grid item xs={1} ></Grid>
+        <Grid item xs={10}>
           <form onSubmit={handleSubmit}>
-            <FormInput
+          <h2 className={styles.titleStyles}>I do not have a account</h2>
+          <span>Sign up with your email and password</span>
+            <TextField
+              className={styles.inputStyles}
+              id="outlined-basic" 
+              variant="outlined"
+              size='small'
               type='text'
               name='displayName'
               value={displayName}
@@ -59,7 +86,11 @@ const SignUp = () => {
               label='Display Name'
               required
             />
-            <FormInput
+            <TextField
+              className={styles.inputStyles}
+              id="outlined-basic" 
+              variant="outlined"
+              size='small'
               type='email'
               name='email'
               value={email}
@@ -67,7 +98,11 @@ const SignUp = () => {
               label='Email'
               required
             />
-            <FormInput
+            <TextField
+              className={styles.inputStyles}
+              id="outlined-basic" 
+              variant="outlined"
+              size='small'
               type='password'
               name='password'
               value={password}
@@ -75,7 +110,11 @@ const SignUp = () => {
               label='Password'
               required
             />
-            <FormInput
+            <TextField
+              className={styles.inputStyles}
+              id="outlined-basic" 
+              variant="outlined"
+              size='small'
               type='password'
               name='confirmPassword'
               value={confirmPassword}
@@ -83,8 +122,13 @@ const SignUp = () => {
               label='Confirm Password'
               required
             />
-            <button className='button' type='submit'>Sign Up</button>
+            <Button className={styles.buttonStyles} variant="contained" color="primary" size="large" type='submit'>
+                    Sign Up
+                </Button>
           </form>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
         </div>
       );
 }

@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import FormInput from '../form-input/form-input.component';
-import './sign-in.styles.scss'
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 import {setUser, setGlobalError} from '../../redux/user/user.slice';
 import { useDispatch } from "react-redux"
@@ -8,6 +6,7 @@ import { useDispatch } from "react-redux"
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     inputStyles: {
@@ -20,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     buttonStyles: {
         width: '35%',
         marginTop: '10px',
+    },
+    titleStyles: {
+        marginTop: '10px',
+        marginBottom: '10px'
     }
 }));
 
@@ -57,8 +60,11 @@ const SignIn = () => {
 
     return (
         <div className='sign-in'>
+            <Grid container>
+            <Grid item xs={1} ></Grid>
+            <Grid item xs={10}>
             <form onSubmit={handleSubmit} >
-                <h2 className='title'>I already have an account</h2>
+                <h2 className={styles.titleStyles}>I already have an account</h2>
                 <span>Sign in with your email and password</span>
                 <TextField
                 className={styles.inputStyles}
@@ -89,6 +95,9 @@ const SignIn = () => {
                 </Button>
                 
             </form>
+            </Grid>
+            <Grid item xs={1}></Grid>
+            </Grid>
         </div>
         
     );
