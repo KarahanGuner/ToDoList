@@ -21,12 +21,12 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     inputStyles: {
-        width: '94%',
+        width: '92%',
         borderRadius: 0
          
     },
     buttonStyles: {
-        width: '6%',
+        width: '8%',
         height: '39px',
         margin: 0,
         padding: 0,
@@ -140,6 +140,7 @@ const Settings = () => {
                     name='newMember'
                     value={newMember}
                     onChange={handleChange}
+                    required
                 />
                 <IconButton type='submit' className={styles.buttonStyles} color="primary"><AddIcon fontSize='large' className={styles.iconStyles}/></IconButton>
             </form>

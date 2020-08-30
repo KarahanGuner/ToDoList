@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import SignIn from '../../components/sign-in/sign-in.component';
 import SignUp from '../../components/sign-up/sign-up.component';
 import AppPage from '../apppage/apppage.component';
+import Button from '@material-ui/core/Button';
+
 // import './homepage.styles.scss';
 
 import { useSelector, useDispatch } from "react-redux"
@@ -11,10 +13,20 @@ import { auth, getCurrentUser, getEnrolledLists } from '../../firebase/firebase.
 
 //material-ui
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    toggleSignInSignUp: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: '13px'   
+    }
+}));
 
 const HomePage = () => {
     const [hasAccount, toggleHasAccount] = useState(true);
-
+    const styles = useStyles();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.userReducer.user);
     console.log('====user in homepage component=====');
@@ -22,17 +34,6 @@ const HomePage = () => {
     const handleSignout = async () => {
         await auth.signOut();
         dispatch(setUser(null));
-    }
-  
-    const isLoggedIn = async () => {
-        const loggedInUser = await getCurrentUser();
-        console.log(loggedInUser);
-    }
-
-    const getLists = async () => {
-        const lists = await getEnrolledLists();
-        console.log(lists.membersOf);
-        console.log(lists.ownersOf);
     }
     
     let signinOrSignUp;
@@ -61,16 +62,15 @@ const HomePage = () => {
             }
             {
                 !user 
-                ? <div><button className='button' type='button' onClick={toggleSigninSignup}>{toggleMessage}</button></div> 
+                ? <div className={styles.toggleSignInSignUp}><Button onClick={toggleSigninSignup} size='small' variant="outlined">{toggleMessage}</Button></div> 
                 : null
             }
             </Grid>
             <Grid item xs={false} sm={2}></Grid>
         </Grid>
-        
+
         <button className='button' type='button' onClick={handleSignout}>Sign Out</button>
-        <button className='button' type='button' onClick={isLoggedIn}>Consolelog LoggedIn User</button>
-        <button className='button' type='button' onClick={getLists}>Get Enrolled Lists</button>
+
     </div>
     )
 };

@@ -14,9 +14,11 @@ const AppPage = () => {
     console.log('this is render in apppage = ' + chooseRender.contents);
     return (
         <div>
+            
             { chooseRender.lists ? <Lists/> : null }
             { chooseRender.contents ? <Contents/> : null }
             { chooseRender.settings ? <Settings/> : null }
+            
         </div>
     )
 };

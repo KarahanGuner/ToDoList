@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     buttonStyles: {
         width: '35%',
         marginTop: '10px',
+        maxWidth: '160px'
     },
     titleStyles: {
         marginTop: '10px',
