@@ -6,7 +6,7 @@ import HomePage from './pages/homepage/homepage.component';
 
 const App = () => {
   return (
-    <Paper square>
+    <Paper square elevation={0}>
       <div className='App'>
         <HomePage/>
       </div>
