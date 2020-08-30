@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     iconStyles: {
         padding: 0
     },
+    formPositionStyles: {
+        marginTop: '5px',
+    }
 
 }));
 
@@ -83,20 +86,22 @@ const Lists = () => {
 
     return (
         <div className='lists'>
-            <form onSubmit={handleSubmit}>
-                <TextField 
-                    className={styles.inputStyles} 
-                    id="outlined-basic" 
-                    label="Create a new list..." 
-                    variant="outlined" 
-                    size='small'
-                    name='newList'
-                    value={newList}
-                    onChange={handleChange}
-                    required
-                />
-                <IconButton type='submit' className={styles.buttonStyles} color="primary"><AddIcon fontSize='large' className={styles.iconStyles}/></IconButton>
-            </form>
+            <div className={styles.formPositionStyles}>
+                <form onSubmit={handleSubmit}>
+                    <TextField 
+                        className={styles.inputStyles} 
+                        id="outlined-basic" 
+                        label="Create a new list..." 
+                        variant="outlined" 
+                        size='small'
+                        name='newList'
+                        value={newList}
+                        onChange={handleChange}
+                        required
+                    />
+                    <IconButton type='submit' className={styles.buttonStyles} color="primary"><AddIcon fontSize='large' className={styles.iconStyles}/></IconButton>
+                </form>
+            </div>
             <div >
                 <FixedSizeList  height={400} itemSize={44} itemCount={listNames.length}>
                     {renderRow}

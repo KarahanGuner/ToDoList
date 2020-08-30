@@ -4,12 +4,12 @@ import SignUp from '../../components/sign-up/sign-up.component';
 import AppPage from '../apppage/apppage.component';
 import Button from '@material-ui/core/Button';
 
-// import './homepage.styles.scss';
+import './homepage.styles.scss';
 
 import { useSelector, useDispatch } from "react-redux"
 import {setUser} from '../../redux/user/user.slice';
 
-import { auth, getCurrentUser, getEnrolledLists } from '../../firebase/firebase.utils';
+import { auth } from '../../firebase/firebase.utils';
 
 //material-ui
 import Grid from '@material-ui/core/Grid';
