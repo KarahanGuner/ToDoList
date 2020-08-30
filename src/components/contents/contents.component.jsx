@@ -21,12 +21,12 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles((theme) => ({
     inputStyles: {
-        width: '94%',
+        width: '92%',
         borderRadius: 0
          
     },
     buttonStyles: {
-        width: '6%',
+        width: '8%',
         height: '39px',
         margin: 0,
         padding: 0,
@@ -123,7 +123,7 @@ const Contents = () => {
                 </Toolbar>
             </AppBar>
             {/* <div>{listName}</div> */}
-            <FixedSizeList height={400} itemSize={44} itemCount={content.length}>
+            <FixedSizeList height={window.innerHeight- 110} itemSize={44} itemCount={content.length}>
                 {renderRow}
             </FixedSizeList>
 

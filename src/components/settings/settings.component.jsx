@@ -144,7 +144,7 @@ const Settings = () => {
                 />
                 <IconButton type='submit' className={styles.buttonStyles} color="primary"><AddIcon fontSize='large' className={styles.iconStyles}/></IconButton>
             </form>
-            <FixedSizeList height={400} itemSize={44} itemCount={membersName.length}>
+            <FixedSizeList height={window.innerHeight- 150} itemSize={44} itemCount={membersName.length}>
                 {renderRow}
             </FixedSizeList>
             <div className={styles.leaveButton}>

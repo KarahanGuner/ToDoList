@@ -103,7 +103,7 @@ const Lists = () => {
                 </form>
             </div>
             <div >
-                <FixedSizeList  height={400} itemSize={44} itemCount={listNames.length}>
+                <FixedSizeList  height={window.innerHeight- 40} itemSize={44} itemCount={listNames.length}>
                     {renderRow}
                 </FixedSizeList>
             </div >

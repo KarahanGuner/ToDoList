@@ -69,7 +69,7 @@ const HomePage = () => {
             <Grid item xs={false} sm={2}></Grid>
         </Grid>
 
-        <button className='button' type='button' onClick={handleSignout}>Sign Out</button>
+        {/* <button className='button' type='button' onClick={handleSignout}>Sign Out</button> */}
 
     </div>
     )
