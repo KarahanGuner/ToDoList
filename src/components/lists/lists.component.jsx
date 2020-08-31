@@ -42,9 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Lists = () => {
     const dispatch = useDispatch();
-
     const styles = useStyles();    
-    console.log('lists component rerendered');
     const [newList, setNewList] = useState('');
     const [listNames, setListNames] = useState([]);
     const [listIds, setListIds] = useState([]);
@@ -61,7 +59,6 @@ const Lists = () => {
     }
 
     useEffect(() => {
-        console.log('use effect in LISTS component fired');
         const getMembersOf = async () => {
             const {membersOf} = await getEnrolledLists();
             setListIds(membersOf);  
@@ -73,7 +70,6 @@ const Lists = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        console.log('reached handle submit');
         await createListDocumentAndAddIdToOwner(newList);
         await setNewList('');
         await toggleForceEffect(value => !value);

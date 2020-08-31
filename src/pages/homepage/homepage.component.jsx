@@ -29,8 +29,6 @@ const HomePage = () => {
     const styles = useStyles();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.userReducer.user);
-    console.log('====user in homepage component=====');
-    console.log(user);
     const handleSignout = async () => {
         await auth.signOut();
         dispatch(setUser(null));

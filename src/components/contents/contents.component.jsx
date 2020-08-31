@@ -62,7 +62,6 @@ const Contents = () => {
     const styles = useStyles(); 
 
     useEffect(() => {
-        console.log('use effect in CONTENTS component fired');
         const getListData = async () => {
             const {content, listName} = await getListDataFromId(listId);
             setListName(listName);

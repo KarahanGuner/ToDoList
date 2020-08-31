@@ -5,13 +5,9 @@ import Settings from '../../components/settings/settings.component';
 //react-redux
 import { useSelector } from "react-redux";
 
-//material-ui
-import Grid from '@material-ui/core/Grid';
-
 
 const AppPage = () => {
     const chooseRender = useSelector((state) => state.renderReducer.render);
-    console.log('this is render in apppage = ' + chooseRender.contents);
     return (
         <div>
             

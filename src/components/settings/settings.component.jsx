@@ -58,7 +58,6 @@ const Settings = () => {
 
     const styles = useStyles();
     useEffect(() => {
-        console.log('use effect in SETTINGS component fired');
         const getListData = async () => {
             const {members, listName, owner} = await getListDataFromId(listId);
             setMembersId(members);
@@ -79,7 +78,6 @@ const Settings = () => {
     
     const handleSubmit = async event => {
         event.preventDefault();
-        console.log('reached handle submit in settings');
         await addNewMemberToList(newMember, listId);
         setNewMember('');
         toggleForceEffect(!forceEffect);
